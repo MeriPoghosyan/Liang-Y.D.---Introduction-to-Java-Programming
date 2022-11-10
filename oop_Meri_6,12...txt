@@ -1,0 +1,1374 @@
+------------------Section 6---------------------
+------------------------------------------------
+------------------------------------------------
+------------------------------------------------
+------------------------------------------------
+6.----------------------------------------------
+package com.company;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        int lines;
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter the number of lines: ");
+        lines = input.nextInt();
+        displayPattern(lines);
+
+    }
+
+    public static void displayPattern(int n){
+        for (int i = 1; i<=n; i++){
+            for (int k=n; k>i; k--)
+                System.out.print("  ");
+            for (int k=i; k>0; k--)
+                System.out.print(k + " ");
+            System.out.println();
+        }
+    }
+}
+------------------------------------------------
+
+
+
+12.----------------------------------------------
+package com.company;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        char ch1;
+        char ch2;
+        int n;
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter the number characters per line: ");
+        n = input.nextInt();
+        System.out.println("Enter the first character: ");
+        ch1 = input.next().charAt(0);
+        System.out.println("Enter the second character: ");
+        ch2 = input.next().charAt(0);
+        printsChars(ch1, ch2, n);
+
+    }
+
+    public static void printsChars(char ch1, char ch2, int numberPerLine) {
+        int k = 0;
+        for (int i = ch1; i <= ch2; i++) {
+            System.out.print((char) i + " ");
+            k++;
+            if (k == numberPerLine) {
+                System.out.println();
+                k = 0;
+            }
+        }
+    }
+}
+------------------------------------------------
+
+
+
+18.---------------------------------------------
+package com.company;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter your password: ");
+        String password = input.next();
+        checkPass(password);
+    }
+
+    public static void checkPass(String password) {
+        int numberOfDigits = 0;
+        for (int i = 0; i < password.length(); i++) {
+            if (Character.isDigit(password.charAt(i)))
+                numberOfDigits++;
+        }
+        if (password.length() >= 8 && password.matches("[a-zA-Z0-9]*") && numberOfDigits >= 2)
+            System.out.println("Valid Password");
+        else
+            System.out.println("Invalid Password");
+
+    }
+}
+------------------------------------------------
+
+24.---------------------------------------------
+public class Exercise_06_24 {
+	/** Main Method */
+	public static void main(String[] args) {
+		// Display current date and time
+		System.out.println(time());
+		System.out.println(date());
+		System.out.println(month());
+		System.out.println(day());
+	}
+
+	/** Method time returns the current time *************************************/
+	public static String time() {
+		final long TIME_ZONE_OFFSET = -4; // USA Time zone offset to GMT 
+
+		// Obtain the total milliseconds since midnight, Jan 1, 1970
+		long totalTime = System.currentTimeMillis();
+
+		// Obtain total seconds since midnight, Jan 1, 1970
+		totalTime /= 1000;
+
+		// Obtain current minute and second
+		String currentMinuteAndSecond = ""; // Holds Minutes and Seconds
+		for (int i = 0; i < 2; i++) {
+			currentMinuteAndSecond = 
+				(totalTime % 60 < 10 ? ":0" + totalTime % 60 : ":" + totalTime % 60)
+				+ currentMinuteAndSecond;
+			totalTime /= 60;
+		}
+		
+		String setAmOrPm = "";
+		// Obtain current hour in 12 format
+		long currentHour = totalTime % 24;
+		if (currentHour == 0)
+			currentHour = 24;
+
+		if (currentHour > 12) {
+			currentHour -= 12;
+			setAmOrPm = " PM";
+		}
+		else
+			setAmOrPm = " AM";
+
+		//Add time zone offset to GMT
+		currentHour += TIME_ZONE_OFFSET;
+
+		return currentHour + currentMinuteAndSecond + setAmOrPm;
+	}
+
+	/** Method date **************************************************************/
+	public static String date() {
+		
+		return year() + "";
+	}
+
+	/** Method year returns the current year *************************************/
+	public static int year() {
+		// Obtain the current year
+		int currentYear = 
+			(int)(System.currentTimeMillis() / millisecondPerYear()) + 1970;
+		
+		return currentYear;
+	}
+
+	/** Method month returns the current month ***********************************/
+	public static int month() {
+		// Obtain the current month
+		int currentMonth =
+			(int)((System.currentTimeMillis() % millisecondPerYear()) 
+			/ millisecondsPerMonth());
+		return currentMonth + 1;
+	}
+
+	/** Method day returns the current day ***************************************/
+	public static int day(){
+		// Obtain the current day
+		return  getTotalNumberOfDays(year(), month());
+	}
+
+	/** Method millisecondPerYear */
+	public static double millisecondPerYear() {
+		return 3.15569E10;
+	}
+
+	/** Method millisecondsPerMonth */
+	public static double millisecondsPerMonth() {
+		return 2.63E9;
+	}
+
+	/** Get the total number of days since January 1, 1800 */
+	public static int getTotalNumberOfDays(int year, int month) {
+		int total = 0;	
+		// Get the total days from 1800 to 1/1/year
+		for (int i = 1800; i < year; i++)
+		if (isLeapYear(i))
+		total = total + 366;
+		else
+		 total = total + 365;
+		
+		// Add days from Jan to the month prior to the calendar month
+		for (int i = 1; i < month; i++)
+		total = total + getNumberOfDaysInMonth(year, i);
+		
+		return total;
+	}
+
+	/** Method isLeapyear */
+	public static boolean isLeapYear(int year) {
+		return year % 400 == 0 || (year % 4 == 0 && year % 400 != 0);
+	}
+
+	/** Get the number of days in a month */
+	public static int getNumberOfDaysInMonth(int year, int month) {
+		if (month == 1 || month == 3 || month == 5 || month == 7 ||
+		month == 8 || month == 10 || month == 12)
+		return 31;
+	
+		if (month == 4 || month == 6 || month == 9 || month == 11)
+		return 30;
+	
+		if (month == 2) return isLeapYear(year) ? 29 : 28;
+		
+		return 0; // If month is incorrect
+	}
+
+}
+---------------------------------------------
+
+
+
+30-Mariamy grel a))
+
+
+
+36.---------------------------------------------
+package com.company;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the number of sides: ");
+        int n = input.nextInt();
+        System.out.print("Enter the side measurements: ");
+        double s = input.nextDouble();
+        System.out.print("The area of the polygon is " + area(n, s));
+    }
+
+    public static double area(int n, double side) {
+        return (n * Math.pow(side, 2)) / (4 * Math.tan(Math.PI / n));
+    }
+}
+------------------------------------------------
+
+
+
+------------------Section 8---------------------
+------------------------------------------------
+------------------------------------------------
+------------------------------------------------
+------------------------------------------------
+6.----------------------------------------------
+package com.company;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        double[][] a = new double[3][3];
+        double[][] b = new double[3][3];
+        System.out.println("Enter matrix1: ");
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                a[i][j] = input.nextDouble();
+            }
+        }
+        System.out.println("Enter matrix2: ");
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                b[i][j] = input.nextDouble();
+            }
+        }
+        double[][] c = multiplyMatrix(a, b);
+        System.out.println("The multiplication of the matrices is ");
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                System.out.printf("%.1f", a[i][j]);
+                if (i == 1 && j == 2) {
+                    System.out.print(" * ");
+                } else if (i != 1 && j == 2) {
+                    System.out.print("   ");
+                } else
+                    System.out.print(" ");
+            }
+            for (int j = 0; j < 3; j++) {
+                System.out.printf("%.1f", b[i][j]);
+                if (i == 1 && j == 2) {
+                    System.out.print(" = ");
+                } else if (i != 1 && j == 2) {
+                    System.out.print("   ");
+                } else
+                    System.out.print(" ");
+            }
+            for (int j = 0; j < 3; j++) {
+                System.out.printf("%.1f ", c[i][j]);
+            }
+            System.out.println();
+
+        }
+    }
+
+    public static double[][] multiplyMatrix(double[][] a, double[][] b) {
+        double[][] c = new double[3][3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++)
+                    c[i][j] += a[i][k] * b[k][j];
+            }
+        }
+        return c;
+    }
+}
+------------------------------------------------
+
+
+
+12.---------------------------------------------
+import java.util.Scanner;
+
+public class Exercise_08_12 {
+	public static void main(String[] args) {
+		// Create a Scanner
+		Scanner input = new Scanner(System.in);
+
+		// Tax rates
+		double[] rates = {0.10, 0.15, 0.25, 0.28, 0.33, 0.35};
+
+		// The brackets for each rate for all the filing statuses
+		int[][] brackets = {
+			{8350, 33950, 82250, 171550, 372950},  // Single filer
+			{16700, 67900, 137050, 20885, 372950}, // Married jointly
+																// -or qualifying widow(er)
+			{8350, 33950, 68525, 104425, 186475},  // Married separately
+			{11950, 45500, 117450, 190200, 372950} // Head of household
+		};
+			
+		// Prompt the user to enter filing status
+		System.out.print("(0-single filer, 1-married jointly or " +
+			"qualifying widow(er), 2-married separately, 3-head of " +
+			"household) Enter the filing status: ");
+		int status = getStatus();
+
+		// Prompt the user to enter taxable income
+		System.out.print("Enter the taxable income: ");
+		double income = input.nextDouble();
+
+
+		// Display the result
+		System.out.printf("Tax is $%6.2f\n", 
+			computeTax(brackets, rates, status, income)); 
+	}
+
+	/** computeTax computes and returns the total 
+	    tax for the filing status brackets */
+	public static double computeTax(int[][] brackets, double[] rates,
+		int status, double income) {
+		double tax = 0, incomeTaxed = 0;
+		for (int i = 4; i >= 0; i--) {
+			if (income > brackets[status][i])
+ 				tax += (incomeTaxed = income - brackets[status][i]) * rates[i + 1];
+				income -= incomeTaxed;
+		} 
+		return tax += brackets[status][0] * rates[0];
+	}
+
+	/** getStatus returns a valid status */
+	public static int getStatus(){
+		Scanner input = new Scanner(System.in);
+		int status;
+		do {
+			status = input.nextInt();
+			if (status < 0 || status > 3)
+				System.out.println("Error: invalid status");
+		} while (status < 0 || status > 3);
+		return status;
+	}
+}
+------------------------------------------------
+
+
+18.---------------------------------------------
+package com.company;
+
+
+public class Main {
+
+    public static void main(String[] args) {
+        int[][] a = {{1, 2}, {3, 4}, {5, 6}, {7, 8}, {9, 10}};
+        shuffle(a);
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < a[i].length; j++) {
+                System.out.print(a[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void shuffle(int[][] a) {
+        int[] temp = new int[a[0].length];
+        for (int i = 0; i < a.length; i++) {
+            int i1 = (int) (Math.random() * a.length);
+            for (int j = 0; j < a[i].length; j++) {
+                temp[j] = a[i][j];
+                a[i][j] = a[i1][j];
+                a[i1][j] = temp[j];
+            }
+        }
+    }
+}
+
+------------------------------------------------
+
+
+
+24.---------------------------------------------
+package com.company;
+
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        int[][] arr = new int[9][9];
+        System.out.println("Enter the solution of a Sudoku: ");
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                arr[i][j] = input.nextInt();
+            }
+        }
+        System.out.println(checkCol(arr) && checkRow(arr) && checkSquares(arr));
+    }
+
+    public static boolean checkCol(int[][] arr) {
+        int[] nums = new int[9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                nums[j] = arr[j][i];
+            }
+            if (!checkNums(nums))
+                return false;
+        }
+        return true;
+    }
+
+    public static boolean checkRow(int[][] arr) {
+        int[] nums = new int[9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                nums[j] = arr[i][j];
+            }
+            if (!checkNums(nums))
+                return false;
+        }
+        return true;
+    }
+
+    public static boolean checkSquares(int[][] arr) {
+        for (int i = 0; i < 9; i += 3) {
+            for (int j = 0; j < 9; j += 3) {
+                if (!checkSquare(arr, i, j))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean checkSquare(int[][] arr, int row, int column) {
+        int[] nums = new int[9];
+        for (int i = 0; i < 9; i++) {
+            nums[i] = arr[row + i / 3][column + i % 3];
+        }
+        return checkNums(nums);
+    }
+
+    public static boolean checkNums(int[] arr) {
+        boolean[] eachNum = new boolean[9];
+        boolean result = true;
+
+        for (int i = 0; i < 9; i++) {
+            eachNum[arr[i] - 1] = true;
+        }
+        for (int i = 0; i < 9; i++) {
+            result &= eachNum[i];
+        }
+        return result;
+    }
+
+}
+------------------------------------------------
+
+
+
+30.---------------------------------------------
+package com.company;
+
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        double[][] a = new double[2][2];
+        double[] b = new double[2];
+
+        System.out.println("Enter a00, aa01, a10, a11, b0, and b1: ");
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < a[i].length; j++)
+                a[i][j] = input.nextDouble();
+        }
+        for (int i = 0; i < b.length; i++)
+            b[i] = input.nextDouble();
+        double[] result = linearEquation(a, b);
+        if (result == null)
+            System.out.println("The equation has no solution");
+        else
+            System.out.println("X is " + result[0] + "\nY is " + result[1]);
+
+    }
+
+    public static double[] linearEquation(double[][] a, double[] b) {
+        if (a[0][0] * a[1][1] - a[0][1] * a[1][0] == 0)
+            return null;
+        double[] result = new double[2];
+        result[0] = (b[0] * a[1][1] - b[1] * a[0][1]) / (a[0][0] * a[1][1] - a[0][1] * a[1][0]);
+        result[1] = (b[1] * a[0][0] - b[0] * a[1][0]) / (a[0][0] * a[1][1] - a[0][1] * a[1][0]);
+        return result;
+    }
+
+}
+------------------------------------------------
+
+
+
+36.---------------------------------------------
+package com.company;
+
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter a number: ");
+        int n = input.nextInt();
+        char[][] square = new char[n][n];
+        System.out.println("Enter 4 rows of letters seperated by spaces:");
+        for (int i = 0; i < square.length; i++) {
+            for (int j = 0; j < square[i].length; j++) {
+                char ch = input.next().charAt(0);
+                if (ch >= 'A' && ch < (char) ('A' + square.length))
+                    square[i][j] = ch;
+                else {
+                    System.out.println("Wrong input: the letters must be from A to " + (char) ('A' + square.length - 1));
+                    System.exit(1);
+                }
+            }
+        }
+        System.out.println("The array is" + (distinct(square) ? " " : "not ") + "a Latin Square");
+    }
+
+    public static boolean distinct(char[][] s) {
+        for (int i = 0; i < s.length; i++) {
+            int[] countsColumn = new int[s[0].length];
+            int[] countsRow = new int[s.length];
+            for (int j = 0; j < s[i].length; j++) {
+                countsColumn[s[j][i] - 65]++;
+                countsRow[s[i][j] - 65]++;
+                if ((countsColumn[s[j][i] - 65] > 1) || countsRow[s[i][j] - 65] > 1)
+                    return false;
+            }
+        }
+        return true;
+    }
+}
+------------------------------------------------
+
+
+
+------------------Section 9---------------------
+------------------------------------------------
+------------------------------------------------
+------------------------------------------------
+------------------------------------------------
+6.----------------------------------------------
+
+class-------------------------------------------
+package com.company;
+
+public class StopWatch {
+    private long startTime;
+    private long endTime;
+
+    public long getElapsedTime() {
+        return endTime - startTime;
+    }
+
+    public void stop() {
+        endTime = System.currentTimeMillis();
+    }
+
+    public void start() {
+        startTime = System.currentTimeMillis();
+    }
+
+    public StopWatch() {
+        startTime = System.currentTimeMillis();
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+}
+-----------------------------------------------
+
+main-------------------------------------------
+package com.company;
+
+
+public class Main {
+
+    public static void main(String[] args) {
+        int[] randomList = new int[100000];
+        for (int i = 0; i < 100000; i++) {
+            randomList[i] = (int) (Math.random() * 100000);
+        }
+        StopWatch sortTime = new StopWatch();
+        sortTime.start();
+        selectionSort(randomList);
+        sortTime.stop();
+        System.out.println("Time for sorting is " + sortTime.getElapsedTime());
+    }
+
+    public static void selectionSort(int[] array) {
+        for (int i = 0; i < array.length - 1; i++) {
+            int min = array[i];
+            int minIndex = i;
+            for (int j = 1; j < array.length; j++) {
+                if (min > array[j]) {
+                    minIndex = j;
+                    min = array[j];
+                }
+            }
+            if (i != minIndex) {
+                array[minIndex] = array[i];
+                array[i] = min;
+            }
+        }
+    }
+}
+------------------------------------------------
+
+
+
+12.---------------------------------------------
+
+class-------------------------------------------
+package com.company;
+
+public class LinearEquation {
+    private double a;
+    private double b;
+    private double c;
+    private double d;
+    private double e;
+    private double f;
+
+    public double getX() {
+        return (e * d - b * f) / (a * d - b * c);
+    }
+
+    public double getY() {
+        return (a * f - e * c) / (a * d - b * c);
+    }
+
+    public boolean isSolvable() {
+        return a * d - b * c != 0;
+    }
+
+    public LinearEquation(double a, double b, double c, double d, double e, double f) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.e = e;
+        this.f = f;
+    }
+
+    public double getA() {
+        return a;
+    }
+
+    public double getB() {
+        return b;
+    }
+
+    public double getC() {
+        return c;
+    }
+
+    public double getD() {
+        return d;
+    }
+
+    public double getE() {
+        return e;
+    }
+
+    public double getF() {
+        return f;
+    }
+}
+------------------------------------------------
+
+main--------------------------------------------
+package com.company;
+
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        System.out.println("Enter x1, y1, x2, y2, x3, y3, x4, y4: ");
+        double[][] points = getPoints();
+        double[] p = getArguments(points);
+        LinearEquation solution = new LinearEquation(p[0], p[1], p[2], p[3], p[4], p[5]);
+        if (solution.isSolvable()) {
+            System.out.println("The point is " + solution.getX() + ", " + solution.getY());
+        } else
+            System.out.println("No solution");
+    }
+
+    public static double[][] getPoints() {
+        Scanner input = new Scanner(System.in);
+        double[][] points = new double[4][2];
+        for (int i = 0; i < points.length; i++) {
+            for (int j = 0; j < points[i].length; j++) {
+                points[i][j] = input.nextDouble();
+            }
+        }
+        return points;
+    }
+
+    public static double[] getArguments(double[][] points) {
+        double[] p = new double[6];
+        p[0] = points[0][1] - points[1][1];
+        p[1] = -1 * (points[0][0] - points[1][0]);
+        p[2] = points[2][1] - points[3][1];
+        p[3] = -1 * (points[2][0] - points[3][0]);
+        p[4] = (points[0][1] - points[1][1]) * points[0][0] - (points[0][0] - points[1][0]) * points[0][1];
+        p[5] = (points[2][1] - points[3][1]) * points[2][0] - (points[2][0] - points[3][0]) * points[2][1];
+        return p;
+    }
+}
+------------------------------------------------
+
+
+
+------------------Section 11--------------------
+------------------------------------------------
+------------------------------------------------
+------------------------------------------------
+------------------------------------------------
+6.----------------------------------------------
+
+class.1-----------------------------------------
+package com.company;
+
+import java.util.Date;
+
+public class Loan {
+    private double annualInterestRate = 2.5;
+    private int numberOfYears = 1;
+    private double loanAmount = 1000;
+
+    public double getMonthlyPayment() {
+        double monthlyInterestRate = annualInterestRate / 1200;
+        double monthlyPayment = loanAmount * monthlyInterestRate / (1 - (1 / Math.pow(1 + monthlyInterestRate, numberOfYears * 12)));
+        return monthlyPayment;
+    }
+
+    public double getTotalPayment() {
+        double totalPayment = getMonthlyPayment() * numberOfYears * 12;
+        return totalPayment;
+    }
+
+    public double getAnnualInterestRate() {
+        return annualInterestRate;
+    }
+
+    public void setAnnualInterestRate(double annualInterestRate) {
+        this.annualInterestRate = annualInterestRate;
+    }
+
+    public int getNumberOfYears() {
+        return numberOfYears;
+    }
+
+    public void setNumberOfYears(int numberOfYears) {
+        this.numberOfYears = numberOfYears;
+    }
+
+    public double getLoanAmount() {
+        return loanAmount;
+    }
+
+    public void setLoanAmount(double loanAmount) {
+        this.loanAmount = loanAmount;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Loan{" +
+                "annualInterestRate=" + annualInterestRate +
+                ", numberOfYears=" + numberOfYears +
+                ", loanAmount=" + loanAmount +
+                '}';
+    }
+
+    public Loan() {
+    }
+
+    public Loan(double annualInterestRate, int numberOfYears, double loanAmount, Date loanDate) {
+        this.annualInterestRate = annualInterestRate;
+        this.numberOfYears = numberOfYears;
+        this.loanAmount = loanAmount;
+    }
+}
+------------------------------------------------
+class.2-----------------------------------------
+package com.company;
+
+public class Circle {
+    private double radius = 1;
+
+    public double getArea() {
+        return radius * radius * Math.PI;
+    }
+
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+
+    @Override
+    public String toString() {
+        return "Circle{" +
+                "radius=" + radius +
+                '}';
+    }
+
+    public Circle() {
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+}
+------------------------------------------------
+
+main--------------------------------------------
+package com.company;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+public class Main {
+
+    public static void main(String[] args) {
+        ArrayList<Object> o = new ArrayList<Object>();
+        o.add(new Loan());
+        o.add(new Circle());
+        o.add(new Date());
+        o.add(new String("Hey"));
+
+        for (int i = 0; i < o.size(); i++)
+            System.out.println(o.get(i).toString());
+    }
+}
+------------------------------------------------
+
+
+
+12.---------------------------------------------
+
+class-------------------------------------------
+package com.company;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class SumOfNums {
+    private ArrayList<Double> o = new ArrayList<Double>();
+
+    public void initializeList(ArrayList<Double> list){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter 5 numbers");
+        for (int i = 0; i<5; i++){
+            list.add(input.nextDouble());
+        }
+    }
+
+    public static double mySum(ArrayList<Double> list){
+        double sum = 0;
+        for (int i = 0; i< list.size();i++)
+            sum += list.get(i);
+        return sum;
+    }
+
+    public ArrayList<Double> getO() {
+        return o;
+    }
+
+    public void setO(ArrayList<Double> o) {
+        this.o = o;
+    }
+
+    public SumOfNums() {
+    }
+
+    public SumOfNums(ArrayList<Double> o) {
+        this.o = o;
+    }
+}
+------------------------------------------------
+
+main--------------------------------------------
+package com.company;
+
+
+public class Main {
+
+    public static void main(String[] args) {
+        SumOfNums myList = new SumOfNums();
+        myList.initializeList(myList.getO());
+        System.out.println(SumOfNums.mySum(myList.getO()));
+    }
+}
+------------------------------------------------
+
+
+
+18.
+class-------------------------------------------
+package com.company;
+
+import java.util.ArrayList;
+
+public class Characters {
+    String myString;
+
+    public ArrayList<Character> toCharacterArray(String s) {
+        ArrayList<Character> toArr = new ArrayList<Character>();
+        for (int i = 0; i < s.length(); i++) {
+            toArr.add(s.charAt(i));
+        }
+        return toArr;
+    }
+
+    public String getMyString() {
+        return myString;
+    }
+
+    public void setMyString(String myString) {
+        this.myString = myString;
+    }
+}
+------------------------------------------------
+main--------------------------------------------
+package com.company;
+
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        Characters myList = new Characters();
+        myList.setMyString(input.next());
+        System.out.println(myList.toCharacterArray(myList.getMyString()));
+    }
+}
+------------------------------------------------
+
+
+
+------------------Section 13--------------------
+------------------------------------------------
+------------------------------------------------
+------------------------------------------------
+------------------------------------------------
+6.----------------------------------------------
+class1------------------------------------------
+package com.company;
+
+public class MyCircle {
+    private double r;
+
+    public double getArea() {
+        return Math.PI * r * r;
+    }
+
+    public double getR() {
+        return r;
+    }
+
+    public void setR(double r) {
+        this.r = r;
+    }
+
+    public MyCircle() {
+    }
+
+    public MyCircle(double r) {
+        this.r = r;
+    }
+
+    @Override
+    public String toString() {
+        return "Radius: " + r;
+    }
+}
+------------------------------------------------
+class2------------------------------------------
+package com.company;
+
+public class CompareCircle extends MyCircle {
+    @Override
+    public String toString() {
+        return super.toString() + "\nArea: " + getArea();
+    }
+
+    public int compareTo(CompareCircle o) {
+        if (getArea() > o.getArea())
+            return 1;
+        else if (getArea() < o.getArea())
+            return -1;
+        else
+            return 0;
+    }
+
+    public CompareCircle(double radius) {
+        super(radius);
+    }
+
+    public CompareCircle() {
+    }
+}
+------------------------------------------------
+main--------------------------------------------
+package com.company;
+
+
+public class Main {
+
+    public static void main(String[] args) {
+        CompareCircle firstCircle = new CompareCircle(5.7);
+        CompareCircle secondCircle = new CompareCircle(7.5);
+
+        System.out.println("FirstCircle\n" + firstCircle);
+        System.out.println("\nSecondCircle\n" + secondCircle);
+        System.out.println((firstCircle.compareTo(secondCircle) == 1 ? "\nfirstCircle" : "\nsecondCircle") + " is larger");
+    }
+}
+------------------------------------------------
+
+
+
+12.---------------------------------------------
+class1------------------------------------------
+package com.company;
+
+public abstract class Shape {
+    private String color;
+
+    abstract public double getArea();
+
+    abstract public double getPerimeter();
+}
+class2------------------------------------------
+package com.company;
+
+public class Rectangle extends Shape {
+    private double width;
+    private double height;
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public Rectangle() {
+    }
+
+    public Rectangle(double width, double height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    @Override
+    public double getArea() {
+        return width * height;
+    }
+
+    @Override
+    public double getPerimeter() {
+        return 2 * width + 2 * height;
+    }
+}
+class3------------------------------------------
+package com.company;
+
+public class MyCircle extends Shape {
+    private double r;
+
+    public double getR() {
+        return r;
+    }
+
+    public void setR(double r) {
+        this.r = r;
+    }
+
+    public MyCircle() {
+    }
+
+    public MyCircle(double r) {
+        this.r = r;
+    }
+
+    @Override
+    public double getArea() {
+        return r * r * Math.PI;
+    }
+
+    @Override
+    public double getPerimeter() {
+        return 2 * r * Math.PI;
+    }
+}
+DAO---------------------------------------------
+package com.company;
+
+public class ShapesDAO {
+    private Shape[] shapes;
+
+    public void AddShapes() {
+        MyCircle circle1 = new MyCircle(2.5);
+        MyCircle circle2 = new MyCircle(3.5);
+        Rectangle rectangle1 = new Rectangle(2.5, 2);
+        Rectangle rectangle2 = new Rectangle(3.5, 2.5);
+        shapes = new Shape[]{circle1, circle2, rectangle1, rectangle2};
+    }
+
+    public void sumArea(Shape[] a) {
+        double sum = 0;
+        for (int i = 0; i < a.length; i++) {
+            sum += a[i].getArea();
+        }
+        System.out.println(sum);
+    }
+
+    public ShapesDAO() {
+    }
+
+    public Shape[] getShapes() {
+        return shapes;
+    }
+}
+main--------------------------------------------
+package com.company;
+
+
+public class Main {
+
+    public static void main(String[] args) {
+        ShapesDAO shapesDAO = new ShapesDAO();
+        shapesDAO.AddShapes();
+        shapesDAO.sumArea(shapesDAO.getShapes());
+    }
+}
+------------------------------------------------
+
+
+
+18.---------------------------------------------
+class-------------------------------------------
+import java.math.*;
+
+public class Rational extends Number implements Comparable {
+	// Data fields for numerator and denominator
+	private BigInteger[] r = new BigInteger[2];
+
+	/** Construct a ratinoal with default properties */
+	public Rational() {
+		this(BigInteger.ZERO, BigInteger.ONE);
+	}
+
+	/** Construct a rational with specifiec numerator and denominator */
+	public Rational(BigInteger numerator, BigInteger denominator) {
+		BigInteger gcd = gcd(numerator, denominator);
+		r[0] = (denominator.compareTo(BigInteger.ZERO) > 0
+			? BigInteger.ONE : 
+			new BigInteger("-1")).multiply(numerator.divide(gcd));
+		r[1] = denominator.divide(gcd);
+	}
+
+	/** Find GCD of two numbers */
+	private static BigInteger gcd(BigInteger n, BigInteger d) {
+		BigInteger n1 = n;
+		BigInteger n2 = d;
+		BigInteger gcd = BigInteger.ONE;
+
+		for (BigInteger k = BigInteger.ONE; 
+			k.compareTo(n1) <= 0 && k.compareTo(n2) <= 0; 
+			k = k.add(BigInteger.ONE)) {
+			if (n1.remainder(k).compareTo(BigInteger.ZERO) == 0 && 
+				n2.remainder(k).compareTo(BigInteger.ZERO) == 0)
+				gcd = k;
+		}
+
+		return gcd;
+	}
+
+	/** Return numerator */
+	public BigInteger getNumerator() {
+		return r[0];
+	}
+
+	/** Return denominator */
+	public BigInteger getDenominator() {
+		return r[1];
+	}
+
+	/** Add a rational number to this rational */
+	public Rational add(Rational secondRational) {
+		BigInteger n = (r[0].multiply(secondRational.getDenominator())).add(
+			r[1].multiply(secondRational.getNumerator()));
+		BigInteger d = r[1].multiply(secondRational.getDenominator());
+		return new Rational(n, d);
+	}
+
+	/** Subtract a rational number from this rational */
+	public Rational subtract(Rational secondRational) {
+		BigInteger n = (r[0].multiply(secondRational.getDenominator())).subtract(
+			r[1].multiply(secondRational.getNumerator()));
+		BigInteger d = r[1].multiply(secondRational.getDenominator());
+		return new Rational(n, d);
+	}
+
+	/** Mulitply a rational number by this rational */
+	public Rational multiply(Rational secondRational) {
+		BigInteger n = r[0].multiply(secondRational.getNumerator());
+		BigInteger d = r[1].multiply(secondRational.getDenominator());
+		return new Rational(n, d);
+	}
+
+	/** Divide a rational number by this rational */
+	public Rational divide(Rational secondRational) {
+		BigInteger n = r[0].multiply(secondRational.getDenominator());
+		BigInteger d = r[1].multiply(secondRational.getNumerator());
+		return new Rational(n, d);
+	}
+
+	@Override
+	public String toString() {
+		if (r[1].compareTo(BigInteger.ONE) == 0)
+			return r[0] + "";
+		else
+			return r[0] + "/" + r[1];
+	}
+
+	@Override // Override the equals method in the Object class
+	public boolean equals(Object other) {
+		if (((this.subtract((Rational)(other))).getNumerator()).compareTo(
+			BigInteger.ZERO) == 0)
+			return true;
+		else
+			return false;
+	}
+
+	@Override // Implement the abstract intValue method in Number
+	public int intValue() {
+		return (int)doubleValue();
+	}
+
+	@Override // Implement the abstract floatValue method in Number
+	public float floatValue() {
+		return (float)doubleValue();
+	}
+
+	@Override // Implement the doubleValue method in Number
+	public double doubleValue() {
+		return this.getNumerator().doubleValue() / 
+			this.getDenominator().doubleValue();
+	}
+
+	@Override // Implement the abstract longValue method in Number
+	public long longValue() {
+		return (long)doubleValue();
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		BigInteger n = this.subtract((Rational)o).getNumerator();
+		if (n.compareTo(BigInteger.ZERO) > 0)
+			return 1;
+		else if (n.compareTo(BigInteger.ZERO) < 0)
+			return -1;
+		else
+			return 0;
+	}
+}
+main--------------------------------------------
+import java.math.BigInteger;
+
+public class Exercise_13_18 {
+	/** Main method */
+	public static void main(String[] args) {
+		// Create a Rational object
+		Rational r = new Rational(BigInteger.ONE, new BigInteger("2"));
+
+		// Add a series of Rationol objects to r
+		for (BigInteger i = r.getNumerator().add(BigInteger.ONE);
+			  i.compareTo(new BigInteger("100")) <= 0;
+			  i = i.add(BigInteger.ONE)) {
+			r = r.add(new Rational(i, i.add(BigInteger.ONE)));
+		}
+
+		// Display results
+		System.out.println(r);
+	}
+}
+------------------------------------------------
